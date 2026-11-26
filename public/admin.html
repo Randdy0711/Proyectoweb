@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Admin | EMILIO BAGS</title>
   <link rel="icon" href="/img/logo/emilio-bags.svg" type="image/svg+xml" />
-  <link rel="stylesheet" href="/css/styles.css" />
+  <link rel="stylesheet" href="/css/styles.css?v=3" />
 </head>
 <body>
   <div id="loginView" class="container admin-login">
@@ -14,7 +14,10 @@
     <p>Ingresa la contraseña para gestionar la tienda.</p>
     <form id="loginForm" class="admin-form">
       <label class="admin-field full">Contraseña<input id="passwordInput" type="password" autocomplete="current-password" required /></label>
-      <div class="admin-actions full"><button class="btn btn-dark" type="submit">Entrar</button></div>
+      <div class="admin-actions login-actions full">
+        <button class="btn btn-dark" type="submit">Entrar</button>
+        <a id="backToShopButton" class="btn btn-outline" href="/">Ver Tienda</a>
+      </div>
       <p id="loginError" class="admin-msg full"></p>
     </form>
   </div>

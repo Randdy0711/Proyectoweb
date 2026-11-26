@@ -208,6 +208,12 @@ function bindEvents() {
     showLogin();
   });
 
+  byId('backToShopButton').addEventListener('click', () => {
+    adminPassword = '';
+    sessionStorage.removeItem('emilio.admin');
+    showLogin();
+  });
+
   document.querySelectorAll('.admin-tab').forEach((tab) => {
     tab.addEventListener('click', () => {
       document.querySelectorAll('.admin-tab').forEach((item) => item.classList.toggle('active', item === tab));

@@ -603,6 +603,21 @@ p { margin: 0 0 12px; color: var(--muted); }
 
 .admin-check { display: flex; align-items: center; gap: 8px; font-size: 0.84rem; }
 .admin-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 6px; }
+.admin-actions.login-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px; }
+.admin-actions.login-actions .btn {
+  width: 100%;
+  min-height: 50px;
+  padding: 0 12px;
+  border-radius: 14px;
+  font-size: 0.88rem;
+  letter-spacing: 0.01em;
+  box-shadow: 0 8px 18px rgba(31, 27, 24, 0.08);
+}
+.admin-actions.login-actions .btn-dark { background: var(--accent); border-color: var(--accent); }
+.admin-actions.login-actions .btn-dark:hover { background: var(--accent-dark); border-color: var(--accent-dark); }
+.admin-actions.login-actions .btn-outline { background: var(--paper); border-color: var(--line); }
+.admin-actions.login-actions .btn-outline:hover { background: var(--soft); border-color: var(--accent); color: var(--accent-dark); }
+.admin-actions.login-actions .btn:focus-visible { outline: 3px solid rgba(168, 97, 110, 0.35); outline-offset: 2px; }
 
 .admin-preview { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 10px; }
 .admin-preview img { width: 78px; height: 78px; object-fit: cover; border-radius: 12px; border: 1px solid var(--line); }
