@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 750">
+  <rect width="600" height="750" fill="#f3ebe4"/>
+  <circle cx="300" cy="330" r="220" fill="#e8d9cd"/>
+  <circle cx="300" cy="275" r="34" fill="none" stroke="#c99a63" stroke-width="14"/>
+  <rect x="265" y="305" width="70" height="180" rx="16" fill="#8b5d47"/>
+  <rect x="265" y="380" width="70" height="12" fill="#a8616e"/>
+  <text x="300" y="620" text-anchor="middle" font-family="Georgia, serif" font-size="38" fill="#1f1b18">EMILIO BAGS</text>
+  <text x="300" y="660" text-anchor="middle" font-family="Arial, sans-serif" font-size="17" letter-spacing="5" fill="#8b4a56">LLAVERO CUERO</text>
+</svg>

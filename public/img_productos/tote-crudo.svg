@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 750">
+  <rect width="600" height="750" fill="#f7f1ea"/>
+  <circle cx="300" cy="330" r="220" fill="#eee2d6"/>
+  <path d="M205 295v-70a95 95 0 0 1 190 0v70" fill="none" stroke="#9d826c" stroke-width="16"/>
+  <path d="M150 290h300l-25 230H175z" fill="#d7c2aa"/>
+  <rect x="150" y="350" width="300" height="12" fill="#b99d82"/>
+  <text x="300" y="620" text-anchor="middle" font-family="Georgia, serif" font-size="38" fill="#1f1b18">EMILIO BAGS</text>
+  <text x="300" y="660" text-anchor="middle" font-family="Arial, sans-serif" font-size="17" letter-spacing="5" fill="#8b4a56">TOTE DIARIO</text>
+</svg>

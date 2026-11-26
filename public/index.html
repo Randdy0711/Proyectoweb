@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="EMILIO BAGS: bolsos, mochilas, carteras y bandoleras. Pedidos por WhatsApp." />
+  <title>EMILIO BAGS | Bolsos y accesorios</title>
+  <link rel="icon" href="/img/logo/emilio-bags.svg" type="image/svg+xml" />
+  <link rel="stylesheet" href="/css/styles.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="topbar">
+      <div class="container topbar-inner">
+        <span id="topShipping">Envíos a todo el Perú</span>
+        <span id="topPayment">Paga con Yape o transferencia</span>
+        <span id="topAttention">Atención por WhatsApp</span>
+      </div>
+    </div>
+    <nav class="nav container" aria-label="Navegación principal">
+      <a class="brand" href="/" aria-label="EMILIO BAGS inicio">
+        <img id="brandLogo" src="/img/logo/emilio-bags.svg" alt="Logo de EMILIO BAGS" />
+        <span class="brand-name">EMILIO <em>BAGS</em></span>
+      </a>
+      <div class="nav-links">
+        <a href="#catalogo">Catálogo</a>
+        <a href="#beneficios">Beneficios</a>
+        <a href="#como-comprar">Cómo comprar</a>
+      </div>
+      <div class="nav-actions">
+        <button id="favoritesNav" class="icon-button" type="button" aria-label="Ver favoritos">♡ <span id="favoritesCount">0</span></button>
+        <button id="cartNav" class="cart-button" type="button">Bolsa <span id="cartCount">0</span></button>
+        <a class="admin-link" href="/admin" title="Acceso administración">Admin</a>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="container hero-inner">
+        <div class="hero-copy">
+          <span class="eyebrow" id="heroEyebrow">Colección 2026</span>
+          <h1 id="heroTitle">Bolsos que <em>resaltan</em> tu estilo</h1>
+          <p id="heroText">Mochilas, carteras y bandoleras elegidas una a uno para acompañarte cada día.</p>
+          <div class="hero-actions">
+            <a class="btn btn-dark" href="#catalogo">Ver colección</a>
+            <a id="heroWhatsapp" class="btn btn-outline" href="#" target="_blank" rel="noopener">Escríbenos</a>
+          </div>
+          <p class="hero-sign">— EMILIO BAGS</p>
+        </div>
+        <div class="hero-media">
+          <img id="heroImage" src="/img_productos/hero-bags.svg" alt="Colección de bolsos EMILIO BAGS" />
+          <span class="hero-badge">Nueva temporada</span>
+        </div>
+      </div>
+    </section>
+
+    <section id="beneficios" class="benefits container" aria-label="Beneficios">
+      <article class="benefit">
+        <span class="benefit-icon">01</span>
+        <div><h3 id="benefitShippingTitle">Envíos a todo el Perú</h3><p id="benefitShippingText">Lima en 24–48 h · provincias por courier</p></div>
+      </article>
+      <article class="benefit">
+        <span class="benefit-icon">02</span>
+        <div><h3 id="benefitPaymentTitle">Paga con Yape</h3><p id="benefitPaymentText">También transferencia o efectivo al recibir</p></div>
+      </article>
+      <article class="benefit">
+        <span class="benefit-icon">03</span>
+        <div><h3 id="benefitAttentionTitle">Atención personalizada</h3><p id="benefitAttentionText">Consulta y haz tu pedido por WhatsApp</p></div>
+      </article>
+    </section>
+
+    <section id="catalogo" class="catalog container">
+      <div class="section-heading">
+        <div>
+          <span class="eyebrow">Nuestros productos</span>
+          <h2>Encuentra tu <em>bolso ideal</em></h2>
+        </div>
+        <p>Piezas seleccionadas una a una para que combines tu estilo con comodidad.</p>
+      </div>
+
+      <div class="toolbar">
+        <div id="categoryChips" class="chips" aria-label="Categorías"></div>
+        <div class="toolbar-controls">
+          <label class="search-field">
+            <span aria-hidden="true">⌕</span>
+            <input id="searchInput" type="search" placeholder="Buscar producto..." aria-label="Buscar producto" />
+          </label>
+          <label class="check-control"><input id="offersToggle" type="checkbox" /> <span>Ofertas</span></label>
+          <label class="check-control"><input id="availableToggle" type="checkbox" /> <span>Disponibles</span></label>
+          <label class="check-control"><input id="favoritesToggle" type="checkbox" /> <span>Favoritos</span></label>
+          <label class="sort-field">
+            <span>Ordenar</span>
+            <select id="sortSelect" aria-label="Ordenar catálogo">
+              <option value="new">Lo más nuevo</option>
+              <option value="low">Menor precio</option>
+              <option value="high">Mayor precio</option>
+              <option value="name">Nombre A–Z</option>
+            </select>
+          </label>
+        </div>
+      </div>
+
+      <div class="catalog-meta">
+        <span id="resultCount">Cargando productos...</span>
+        <button id="clearFilters" class="link-button" type="button">Quitar filtros</button>
+      </div>
+
+      <div id="productGrid" class="product-grid"></div>
+      <div id="emptyState" class="empty-state" hidden>
+        <h3>No encontramos productos</h3>
+        <p>Prueba con otra categoría o quita los filtros.</p>
+        <button id="emptyClear" class="btn btn-dark" type="button">Quitar filtros</button>
+      </div>
+    </section>
+
+    <section id="como-comprar" class="how container">
+      <div class="section-heading compact">
+        <div><span class="eyebrow">Es muy fácil</span><h2>Comprar toma <em>dos minutos</em></h2></div>
+      </div>
+      <div class="steps">
+        <article><span>1</span><h3>Arma tu bolsa</h3><p>Elige tus bolsos y variantes. Puedes juntar todos los que quieras.</p></article>
+        <article><span>2</span><h3>Envía el pedido</h3><p>Un toque abre WhatsApp con tu pedido ya escrito: productos, variantes y total.</p></article>
+        <article><span>3</span><h3>Paga y recibe</h3><p>Yapea al número que te confirmamos, envía la captura y preparamos tu envío.</p></article>
+      </div>
+    </section>
+
+    <section class="help container">
+      <div>
+        <span class="eyebrow">¿Tienes dudas?</span>
+        <h2>Te ayudamos a <em>elegir</em></h2>
+        <p>Cuéntanos qué necesitas y te recomendamos el bolso ideal para ti.</p>
+      </div>
+      <a id="helpWhatsapp" class="btn btn-light" href="#" target="_blank" rel="noopener">Consultar por WhatsApp</a>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <div>
+        <span class="footer-brand">EMILIO BAGS</span>
+        <p id="footerNote">Bolsos que acompañan tu estilo.</p>
+      </div>
+      <div class="footer-links">
+        <a href="#catalogo">Catálogo</a>
+        <a href="#como-comprar">Cómo comprar</a>
+        <a href="/admin">Admin</a>
+      </div>
+      <span class="footer-year">© 2026 EMILIO BAGS</span>
+    </div>
+  </footer>
+
+  <div id="productModal" class="modal" hidden>
+    <div class="modal-backdrop" data-close-modal></div>
+    <div class="modal-panel" role="dialog" aria-modal="true" aria-label="Detalle del producto">
+      <button class="modal-close" type="button" data-close-modal aria-label="Cerrar">×</button>
+      <div class="modal-content">
+        <div id="modalGallery" class="modal-gallery"></div>
+        <div class="modal-detail">
+          <span id="modalCategory" class="eyebrow"></span>
+          <h2 id="modalName"></h2>
+          <div id="modalPrice" class="modal-price"></div>
+          <p id="modalDescription"></p>
+          <label class="variant-label">Color <select id="modalColor"></select></label>
+          <label class="variant-label">Tamaño <select id="modalSize"></select></label>
+          <button id="modalAdd" class="btn btn-dark btn-block" type="button">Agregar a la bolsa</button>
+          <p class="modal-note">Envío calculado aparte según tu distrito. Confirmamos el total por WhatsApp.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <aside id="cartDrawer" class="drawer" hidden>
+    <div class="drawer-backdrop" data-close-cart></div>
+    <div class="drawer-panel" role="dialog" aria-modal="true" aria-label="Mi bolsa">
+      <div class="drawer-header">
+        <h2>Mi bolsa</h2>
+        <button type="button" data-close-cart aria-label="Cerrar">×</button>
+      </div>
+      <div id="cartItems" class="cart-items"></div>
+      <div class="drawer-footer">
+        <div class="cart-total"><span>Total</span><strong id="cartTotal">S/ 0.00</strong></div>
+        <p id="cartNote">El envío se cotiza aparte según tu distrito.</p>
+        <button id="checkoutButton" class="btn btn-dark btn-block" type="button">Enviar pedido por WhatsApp</button>
+      </div>
+    </div>
+  </aside>
+
+  <div id="toast" class="toast" hidden></div>
+  <a id="floatWhatsapp" class="float-whatsapp" href="#" target="_blank" rel="noopener" aria-label="Escribir por WhatsApp">WA</a>
+
+  <script src="/js/app.js" defer></script>
+</body>
+</html>

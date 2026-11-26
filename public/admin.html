@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin | EMILIO BAGS</title>
+  <link rel="icon" href="/img/logo/emilio-bags.svg" type="image/svg+xml" />
+  <link rel="stylesheet" href="/css/styles.css" />
+</head>
+<body>
+  <div id="loginView" class="container admin-login">
+    <span class="eyebrow">EMILIO BAGS</span>
+    <h1>Acceso admin</h1>
+    <p>Ingresa la contraseña para gestionar la tienda.</p>
+    <form id="loginForm" class="admin-form">
+      <label class="admin-field full">Contraseña<input id="passwordInput" type="password" autocomplete="current-password" required /></label>
+      <div class="admin-actions full"><button class="btn btn-dark" type="submit">Entrar</button></div>
+      <p id="loginError" class="admin-msg full"></p>
+    </form>
+  </div>
+
+  <div id="adminView" class="admin-shell" hidden>
+    <div class="admin-title">
+      <div>
+        <span class="eyebrow">Panel de gestión</span>
+        <h1>EMILIO BAGS</h1>
+      </div>
+      <div class="admin-actions">
+        <a class="btn btn-outline" href="/">Ver tienda</a>
+        <button id="logoutButton" class="btn btn-outline" type="button">Salir</button>
+      </div>
+    </div>
+
+    <nav class="admin-tabs" aria-label="Secciones">
+      <button class="admin-tab active" type="button" data-tab="products">Productos</button>
+      <button class="admin-tab" type="button" data-tab="categories">Categorías</button>
+      <button class="admin-tab" type="button" data-tab="shop">Configuración</button>
+    </nav>
+
+    <section id="tab-products">
+      <div class="admin-card">
+        <h2 id="productFormTitle">Nuevo producto</h2>
+        <form id="productForm" class="admin-form">
+          <input type="hidden" name="id" />
+          <label class="admin-field full">Nombre<input name="name" required /></label>
+          <label class="admin-field">Categoría<select name="category" id="productCategory"></select></label>
+          <label class="admin-field">Precio (S/)<input name="price" type="number" step="0.01" min="0" required /></label>
+          <label class="admin-field">Precio anterior (opcional)<input name="oldPrice" type="number" step="0.01" min="0" /></label>
+          <label class="admin-field">Colores (separados por coma)<input name="colors" placeholder="Negro, Café, Beige" /></label>
+          <label class="admin-field">Tallas o medidas<input name="sizes" placeholder="Única, 28, 30" /></label>
+          <label class="admin-field">Etiqueta<input name="badge" placeholder="Oferta, Nuevo" /></label>
+          <label class="admin-field full">Descripción<textarea name="description"></textarea></label>
+          <label class="admin-check"><input name="stock" type="checkbox" checked /> Disponible</label>
+          <label class="admin-check"><input name="active" type="checkbox" checked /> Visible en tienda</label>
+          <label class="admin-check"><input name="featured" type="checkbox" /> Destacado</label>
+          <label class="admin-field full">Fotos del producto<input id="productImages" type="file" accept="image/*" multiple /></label>
+          <div id="imagePreview" class="admin-preview full"></div>
+          <div class="admin-actions full">
+            <button class="btn btn-dark" type="submit">Guardar producto</button>
+            <button id="resetProductButton" class="btn btn-outline" type="button">Nuevo</button>
+          </div>
+          <p id="productMessage" class="admin-msg full"></p>
+        </form>
+      </div>
+
+      <div class="admin-card">
+        <h2>Productos cargados</h2>
+        <div class="admin-table-wrap">
+          <table class="admin-table">
+            <thead><tr><th>Foto</th><th>Producto</th><th>Categoría</th><th>Precio</th><th>Estado</th><th>Acciones</th></tr></thead>
+            <tbody id="productTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section id="tab-categories" hidden>
+      <div class="admin-card">
+        <h2 id="categoryFormTitle">Nueva categoría</h2>
+        <form id="categoryForm" class="admin-form">
+          <input type="hidden" name="id" />
+          <label class="admin-field">Nombre<input name="name" required placeholder="Mochilas" /></label>
+          <label class="admin-field">Icono o etiqueta corta<input name="icon" placeholder="Moch" /></label>
+          <div class="admin-actions full">
+            <button class="btn btn-dark" type="submit">Guardar categoría</button>
+            <button id="resetCategoryButton" class="btn btn-outline" type="button">Nueva</button>
+          </div>
+          <p id="categoryMessage" class="admin-msg full"></p>
+        </form>
+      </div>
+      <div class="admin-card">
+        <h2>Categorías</h2>
+        <div class="admin-table-wrap">
+          <table class="admin-table">
+            <thead><tr><th>Nombre</th><th>ID</th><th>Acciones</th></tr></thead>
+            <tbody id="categoryTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section id="tab-shop" hidden>
+      <div class="admin-card">
+        <h2>Datos de la tienda</h2>
+        <form id="shopForm" class="admin-form">
+          <label class="admin-field">Nombre de marca<input name="brand" /></label>
+          <label class="admin-field">WhatsApp (solo números)<input name="whatsapp" /></label>
+          <label class="admin-field">Moneda<input name="currency" /></label>
+          <label class="admin-field">Mensaje por defecto<input name="whatsappMessage" /></label>
+          <label class="admin-field full">Título principal (puede usar &lt;em&gt;)<input name="heroTitle" /></label>
+          <label class="admin-field full">Texto principal<textarea name="heroText"></textarea></label>
+          <label class="admin-field">Etiqueta superior<input name="heroEyebrow" /></label>
+          <label class="admin-field">Foto principal<input name="heroImage" /></label>
+          <label class="admin-field full">Logo<input name="logo" /></label>
+          <label class="admin-field full">Subir logo<input id="logoUpload" type="file" accept="image/*" /></label>
+          <label class="admin-field">Envíos (barra superior)<input name="topShipping" /></label>
+          <label class="admin-field">Pago (barra superior)<input name="topPayment" /></label>
+          <label class="admin-field">Atención (barra superior)<input name="topAttention" /></label>
+          <label class="admin-field full">Nota del carrito<input name="cartNote" /></label>
+          <label class="admin-field full">Pie de página<input name="footerNote" /></label>
+          <label class="admin-field">Color acento<input name="accent" type="color" /></label>
+          <label class="admin-field">Color acento oscuro<input name="accentDark" type="color" /></label>
+          <label class="admin-field">Color fondo<input name="cream" type="color" /></label>
+          <label class="admin-field">Color texto<input name="ink" type="color" /></label>
+          <label class="admin-field">Beneficio 1 título<input name="shippingTitle" /></label>
+          <label class="admin-field">Beneficio 1 texto<input name="shippingText" /></label>
+          <label class="admin-field">Beneficio 2 título<input name="paymentTitle" /></label>
+          <label class="admin-field">Beneficio 2 texto<input name="paymentText" /></label>
+          <label class="admin-field">Beneficio 3 título<input name="attentionTitle" /></label>
+          <label class="admin-field">Beneficio 3 texto<input name="attentionText" /></label>
+          <div class="admin-actions full"><button class="btn btn-dark" type="submit">Guardar configuración</button></div>
+          <p id="shopMessage" class="admin-msg full"></p>
+        </form>
+      </div>
+    </section>
+  </div>
+
+  <script src="/js/admin.js" defer></script>
+</body>
+</html>

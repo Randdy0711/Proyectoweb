@@ -1,0 +1,68 @@
+{
+  "brand": "EMILIO BAGS",
+  "currency": "S/",
+  "whatsapp": "51900000000",
+  "whatsappMessage": "¡Hola EMILIO BAGS! Quisiera más información.",
+  "logo": "/img/logo/emilio-bags.svg",
+  "heroEyebrow": "Colección 2026",
+  "heroTitle": "Bolsos que <em>resaltan</em> tu estilo",
+  "heroText": "Mochilas, carteras y bandoleras elegidas una a una para acompañarte cada día.",
+  "heroImage": "/img_productos/hero-bags.svg",
+  "topShipping": "Envíos a todo el Perú",
+  "topPayment": "Paga con Yape o transferencia",
+  "topAttention": "Atención por WhatsApp",
+  "cartNote": "El envío se cotiza aparte según tu distrito. Confirmamos el total por WhatsApp antes de pagar.",
+  "footerNote": "Bolsos que acompañan tu estilo.",
+  "colors": {
+    "accent": "#a8616e",
+    "accentDark": "#8b4a56",
+    "cream": "#faf6f1",
+    "ink": "#1f1b18"
+  },
+  "benefits": {
+    "shipping": {
+      "title": "Envíos a todo el Perú",
+      "text": "Lima en 24–48 h · provincias por courier"
+    },
+    "payment": {
+      "title": "Paga con Yape",
+      "text": "También transferencia o efectivo al recibir"
+    },
+    "attention": {
+      "title": "Atención personalizada",
+      "text": "Consulta y haz tu pedido por WhatsApp"
+    }
+  },
+  "categories": [
+    {
+      "id": "bolsos",
+      "name": "Bolsos",
+      "icon": "Bol"
+    },
+    {
+      "id": "mochilas",
+      "name": "Mochilas",
+      "icon": "Moc"
+    },
+    {
+      "id": "carteras",
+      "name": "Carteras",
+      "icon": "Car"
+    },
+    {
+      "id": "bandoleras",
+      "name": "Bandoleras",
+      "icon": "Ban"
+    },
+    {
+      "id": "totes",
+      "name": "Totes",
+      "icon": "Tot"
+    },
+    {
+      "id": "accesorios",
+      "name": "Accesorios",
+      "icon": "Acc"
+    }
+  ]
+}

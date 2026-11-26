@@ -1,0 +1,189 @@
+[
+  {
+    "id": "p-1795671446188-4dc2cf",
+    "name": "Cartera Guess",
+    "category": "bolsos",
+    "price": 90,
+    "oldPrice": null,
+    "images": [
+      "/img_productos/1795671436008-d542d4f4-906157909_122118225243497692_69748364739.jpg"
+    ],
+    "colors": [
+      "Negro"
+    ],
+    "sizes": [],
+    "description": "Bolsa Gues Esclusivo de AAA",
+    "badge": "Nuevo",
+    "stock": true,
+    "active": true,
+    "featured": false,
+    "createdAt": "2026-11-26T05:37:26.188Z",
+    "updatedAt": "2026-11-26T05:37:26.188Z"
+  },
+  {
+    "id": "demo-bolso-estructura",
+    "name": "Bolso Estructura Negro",
+    "category": "bolsos",
+    "price": 89,
+    "oldPrice": 109,
+    "images": [
+      "/img_productos/bolso-negro.svg"
+    ],
+    "colors": [
+      "Negro",
+      "Café"
+    ],
+    "sizes": [
+      "Única"
+    ],
+    "description": "Bolso de estructura firme con compartimento principal y cierre seguro. Ideal para el día a día.",
+    "badge": "Oferta",
+    "stock": true,
+    "active": true,
+    "featured": true,
+    "createdAt": "2026-11-20T10:00:00.000Z",
+    "updatedAt": "2026-11-20T10:00:00.000Z"
+  },
+  {
+    "id": "demo-bolso-mini",
+    "name": "Bolso Mini Beige",
+    "category": "bolsos",
+    "price": 69,
+    "oldPrice": null,
+    "images": [
+      "/img_productos/bolso-beige.svg"
+    ],
+    "colors": [
+      "Beige",
+      "Blanco"
+    ],
+    "sizes": [
+      "Única"
+    ],
+    "description": "Compacto y liviano, perfecto para llevar lo esencial con un look limpio.",
+    "badge": "",
+    "stock": true,
+    "active": true,
+    "featured": false,
+    "createdAt": "2026-11-18T10:00:00.000Z",
+    "updatedAt": "2026-11-18T10:00:00.000Z"
+  },
+  {
+    "id": "demo-mochila-urbana",
+    "name": "Mochila Urbana Café",
+    "category": "mochilas",
+    "price": 119,
+    "oldPrice": 139,
+    "images": [
+      "/img_productos/mochila-cafe.svg"
+    ],
+    "colors": [
+      "Café",
+      "Negro"
+    ],
+    "sizes": [
+      "Única"
+    ],
+    "description": "Mochila amplia con bolsillo interior y tirantes acolchados para mayor comodidad.",
+    "badge": "Oferta",
+    "stock": true,
+    "active": true,
+    "featured": true,
+    "createdAt": "2026-11-15T10:00:00.000Z",
+    "updatedAt": "2026-11-15T10:00:00.000Z"
+  },
+  {
+    "id": "demo-cartera-slim",
+    "name": "Cartera Slim Rosa",
+    "category": "carteras",
+    "price": 59,
+    "oldPrice": null,
+    "images": [
+      "/img_productos/cartera-rosa.svg"
+    ],
+    "colors": [
+      "Rosa",
+      "Beige"
+    ],
+    "sizes": [
+      "Única"
+    ],
+    "description": "Cartera delgada con espacio para tarjetas, efectivo y billetes.",
+    "badge": "",
+    "stock": true,
+    "active": true,
+    "featured": false,
+    "createdAt": "2026-11-12T10:00:00.000Z",
+    "updatedAt": "2026-11-12T10:00:00.000Z"
+  },
+  {
+    "id": "demo-bandolera-diagonal",
+    "name": "Bandolera Diagonal Negra",
+    "category": "bandoleras",
+    "price": 79,
+    "oldPrice": null,
+    "images": [
+      "/img_productos/bandolera-negra.svg"
+    ],
+    "colors": [
+      "Negro"
+    ],
+    "sizes": [
+      "Ajustable"
+    ],
+    "description": "Bandolera de correa ajustable con cierre frontal y interior forrado.",
+    "badge": "Nuevo",
+    "stock": true,
+    "active": true,
+    "featured": false,
+    "createdAt": "2026-11-10T10:00:00.000Z",
+    "updatedAt": "2026-11-10T10:00:00.000Z"
+  },
+  {
+    "id": "demo-tote-diario",
+    "name": "Tote Diario Crudo",
+    "category": "totes",
+    "price": 95,
+    "oldPrice": 110,
+    "images": [
+      "/img_productos/tote-crudo.svg"
+    ],
+    "colors": [
+      "Crudo",
+      "Negro"
+    ],
+    "sizes": [
+      "Única"
+    ],
+    "description": "Tote de gran capacidad con asas reforzadas para uso diario.",
+    "badge": "Oferta",
+    "stock": true,
+    "active": true,
+    "featured": false,
+    "createdAt": "2026-11-08T10:00:00.000Z",
+    "updatedAt": "2026-11-08T10:00:00.000Z"
+  },
+  {
+    "id": "demo-llavero-cuero",
+    "name": "Llavero Cuero",
+    "category": "accesorios",
+    "price": 25,
+    "oldPrice": null,
+    "images": [
+      "/img_productos/accesorio-llavero.svg"
+    ],
+    "colors": [
+      "Café"
+    ],
+    "sizes": [
+      "Única"
+    ],
+    "description": "Accesorio de cuero con argolla metálica.",
+    "badge": "",
+    "stock": false,
+    "active": true,
+    "featured": false,
+    "createdAt": "2026-11-05T10:00:00.000Z",
+    "updatedAt": "2026-11-05T10:00:00.000Z"
+  }
+]

@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <rect width="200" height="200" rx="42" fill="#1f1b18"/>
+  <rect x="16" y="16" width="168" height="168" rx="32" fill="none" stroke="#a8616e" stroke-width="3"/>
+  <text x="100" y="108" text-anchor="middle" font-family="Georgia, serif" font-size="66" fill="#fff">EB</text>
+  <text x="100" y="146" text-anchor="middle" font-family="Georgia, serif" font-size="17" letter-spacing="7" fill="#e5b7bf">BAGS</text>
+</svg>
