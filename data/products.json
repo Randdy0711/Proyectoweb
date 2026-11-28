@@ -4,7 +4,7 @@
     "name": "Cartera Guess",
     "category": "bolsos",
     "price": 90,
-    "oldPrice": null,
+    "oldPrice": 120,
     "images": [
       "/img_productos/1795671436008-d542d4f4-906157909_122118225243497692_69748364739.jpg"
     ],
@@ -16,9 +16,10 @@
     "badge": "Nuevo",
     "stock": true,
     "active": true,
-    "featured": false,
+    "featured": true,
     "createdAt": "2026-11-26T05:37:26.188Z",
-    "updatedAt": "2026-11-26T05:37:26.188Z"
+    "updatedAt": "2026-11-28T05:23:04.739Z",
+    "quantity": null
   },
   {
     "id": "demo-bolso-estructura",
@@ -42,7 +43,8 @@
     "active": true,
     "featured": true,
     "createdAt": "2026-11-20T10:00:00.000Z",
-    "updatedAt": "2026-11-20T10:00:00.000Z"
+    "updatedAt": "2026-11-20T10:00:00.000Z",
+    "quantity": null
   },
   {
     "id": "demo-bolso-mini",
@@ -66,7 +68,8 @@
     "active": true,
     "featured": false,
     "createdAt": "2026-11-18T10:00:00.000Z",
-    "updatedAt": "2026-11-18T10:00:00.000Z"
+    "updatedAt": "2026-11-18T10:00:00.000Z",
+    "quantity": null
   },
   {
     "id": "demo-mochila-urbana",
@@ -90,7 +93,8 @@
     "active": true,
     "featured": true,
     "createdAt": "2026-11-15T10:00:00.000Z",
-    "updatedAt": "2026-11-15T10:00:00.000Z"
+    "updatedAt": "2026-11-15T10:00:00.000Z",
+    "quantity": null
   },
   {
     "id": "demo-cartera-slim",
@@ -114,7 +118,8 @@
     "active": true,
     "featured": false,
     "createdAt": "2026-11-12T10:00:00.000Z",
-    "updatedAt": "2026-11-12T10:00:00.000Z"
+    "updatedAt": "2026-11-12T10:00:00.000Z",
+    "quantity": null
   },
   {
     "id": "demo-bandolera-diagonal",
@@ -137,7 +142,8 @@
     "active": true,
     "featured": false,
     "createdAt": "2026-11-10T10:00:00.000Z",
-    "updatedAt": "2026-11-10T10:00:00.000Z"
+    "updatedAt": "2026-11-10T10:00:00.000Z",
+    "quantity": null
   },
   {
     "id": "demo-tote-diario",
@@ -161,7 +167,8 @@
     "active": true,
     "featured": false,
     "createdAt": "2026-11-08T10:00:00.000Z",
-    "updatedAt": "2026-11-08T10:00:00.000Z"
+    "updatedAt": "2026-11-08T10:00:00.000Z",
+    "quantity": null
   },
   {
     "id": "demo-llavero-cuero",
@@ -180,10 +187,11 @@
     ],
     "description": "Accesorio de cuero con argolla metálica.",
     "badge": "",
-    "stock": false,
+    "quantity": 1,
+    "stock": true,
     "active": true,
     "featured": false,
     "createdAt": "2026-11-05T10:00:00.000Z",
-    "updatedAt": "2026-11-05T10:00:00.000Z"
+    "updatedAt": "2026-11-28T05:36:58.219Z"
   }
 ]

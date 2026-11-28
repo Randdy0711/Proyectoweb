@@ -389,7 +389,9 @@ p { margin: 0 0 12px; color: var(--muted); }
 .add-button:hover { background: var(--accent-dark); }
 .add-button:disabled { background: #c9c0b8; cursor: not-allowed; }
 
-.out-of-stock { position: absolute; inset: auto 0 0; padding: 10px; text-align: center; background: var(--ink); color: #fff; font-size: 0.78rem; }
+.stock-count { font-size: 0.65rem; font-weight: 700; letter-spacing: 0.02em; color: var(--accent-dark); }
+.product-media .stock-count { position: absolute; left: 12px; bottom: 12px; background: rgba(255, 255, 255, 0.92); border-radius: 999px; padding: 4px 9px; }
+.product-media .stock-count.out { background: rgba(163, 51, 51, 0.94); color: #fff; }
 
 .empty-state { text-align: center; padding: 70px 20px; border: 1px dashed var(--line); border-radius: var(--radius); }
 
@@ -508,6 +510,7 @@ p { margin: 0 0 12px; color: var(--muted); }
 
 .qty-control { display: inline-flex; align-items: center; gap: 8px; margin-top: 6px; }
 .qty-control button { width: 24px; height: 24px; border: 1px solid var(--line) !important; border-radius: 50%; text-decoration: none !important; font-size: 0.9rem !important; color: var(--ink) !important; }
+.qty-control button:disabled { opacity: 0.35; cursor: not-allowed; }
 .qty-control span { min-width: 16px; text-align: center; font-size: 0.8rem; }
 
 .cart-empty { text-align: center; color: var(--muted); padding: 50px 10px; }

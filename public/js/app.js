@@ -24,6 +24,8 @@ const state = {
   products: [],
   favorites: new Set(storage.get('emilio.favorites', [])),
   cart: storage.get('emilio.cart', []),
+  orderId: null,
+  checkoutBusy: false,
   activeProduct: null,
   filters: {
     category: 'all',
@@ -66,8 +68,39 @@ function imageOf(product) {
   return product.images && product.images.length ? product.images[0] : placeholderImage(product.name);
 }
 
+function productQuantity(product) {
+  if (product.quantity === null || product.quantity === undefined) return null;
+  const number = Number(product.quantity);
+  return Number.isFinite(number) ? Math.max(0, Math.floor(number)) : null;
+}
+
+function isInStock(product) {
+  const quantity = productQuantity(product);
+  if (quantity !== null) return quantity > 0;
+  return product.stock !== false;
+}
+
+function remainingStock(product) {
+  const quantity = productQuantity(product);
+  if (quantity === null) return Infinity;
+  const inCart = state.cart.filter((item) => item.id === product.id).reduce((sum, item) => sum + item.qty, 0);
+  return Math.max(0, quantity - inCart);
+}
+
+function sanitizeCart() {
+  state.cart = state.cart.filter((item) => {
+    const product = state.products.find((entry) => entry.id === item.id);
+    if (!product) return true;
+    if (!isInStock(product)) return false;
+    const quantity = productQuantity(product);
+    if (quantity !== null && Number(item.qty) > quantity) item.qty = quantity;
+    return Number(item.qty) > 0;
+  });
+  storage.set('emilio.cart', state.cart);
+}
+
 function whatsappUrl(message) {
-  const number = String(state.shop.whatsapp || '51900000000').replace(/\D/g, '');
+  const number = String(state.shop.whatsapp || '51990556480').replace(/\D/g, '');
   const text = encodeURIComponent(message || state.shop.whatsappMessage || `¡Hola ${state.shop.brand || 'EMILIO BAGS'}!`);
   return `https://wa.me/${number}?text=${text}`;
 }
@@ -144,7 +177,7 @@ function filteredProducts() {
     if (product.active === false) return false;
     if (filters.category !== 'all' && product.category !== filters.category) return false;
     if (filters.offers && !(product.oldPrice && product.oldPrice > product.price)) return false;
-    if (filters.available && product.stock === false) return false;
+    if (filters.available && !isInStock(product)) return false;
     if (filters.favorites && !state.favorites.has(product.id)) return false;
     if (search) {
       const haystack = `${product.name} ${product.description || ''} ${categoryName(product.category)}`.toLowerCase();
@@ -172,7 +205,13 @@ function productCard(product) {
   const image = imageOf(product);
   const hover = product.images && product.images[1] && product.images[1] !== image ? product.images[1] : '';
   const isFavorite = state.favorites.has(product.id);
-  const inStock = product.stock !== false;
+  const inStock = isInStock(product);
+  const remaining = remainingStock(product);
+  const canAdd = inStock && remaining > 0;
+  const quantity = productQuantity(product);
+  const stockText = quantity === null
+    ? 'Stock: 0 · Agotado'
+    : !inStock ? 'Stock: 0 · Agotado' : `Stock: ${quantity}`;
   const badge = product.badge || (product.oldPrice && product.oldPrice > product.price ? 'Oferta' : '');
   const price = `<strong>${money(product.price)}</strong>${product.oldPrice && product.oldPrice > product.price ? `<s>${money(product.oldPrice)}</s>` : ''}`;
   const variants = [...(product.colors || []), ...(product.sizes || [])].slice(0, 4)
@@ -184,14 +223,14 @@ function productCard(product) {
         <img src="${escapeHtml(image)}" alt="${escapeHtml(product.name)}" loading="lazy" data-open="${escapeHtml(product.id)}" data-main="${escapeHtml(image)}" data-hover="${escapeHtml(hover)}" />
         ${badge ? `<span class="product-badge">${escapeHtml(badge)}</span>` : ''}
         <button type="button" class="fav-button ${isFavorite ? 'active' : ''}" data-fav="${escapeHtml(product.id)}" aria-label="Favorito">${isFavorite ? '♥' : '♡'}</button>
-        ${inStock ? '' : '<span class="out-of-stock">Agotado</span>'}
+        ${quantity !== null || !inStock ? `<span class="stock-count ${inStock ? '' : 'out'}">${stockText}</span>` : ''}
       </div>
       <div class="product-body">
         <span class="product-category">${escapeHtml(categoryName(product.category))}</span>
         <h3 class="product-name">${escapeHtml(product.name)}</h3>
         <div class="product-price">${price}</div>
         ${variants ? `<div class="product-variants">${variants}</div>` : ''}
-        <button type="button" class="add-button" data-add="${escapeHtml(product.id)}" ${inStock ? '' : 'disabled'}>${inStock ? 'Agregar a la bolsa' : 'Sin stock'}</button>
+        <button type="button" class="add-button" data-add="${escapeHtml(product.id)}" ${canAdd ? '' : 'disabled'}>${!inStock ? 'Sin stock' : remaining === 0 ? 'Ya en tu bolsa' : 'Agregar a la bolsa'}</button>
       </div>
     </article>`;
 }
@@ -213,6 +252,11 @@ function openModal(id) {
   byId('modalName').textContent = product.name;
   byId('modalPrice').innerHTML = `<strong>${money(product.price)}</strong>${product.oldPrice && product.oldPrice > product.price ? `<s>${money(product.oldPrice)}</s>` : ''}`;
   byId('modalDescription').textContent = product.description || 'Bolso seleccionado por EMILIO BAGS.';
+  const inStock = isInStock(product);
+  const remaining = remainingStock(product);
+  const quantity = productQuantity(product);
+  byId('modalStock').hidden = quantity === null && inStock;
+  byId('modalStock').textContent = !inStock ? 'Stock: 0 · Agotado' : `Stock: ${quantity}`;
 
   const images = product.images && product.images.length ? product.images : [imageOf(product)];
   byId('modalGallery').innerHTML = images.map((image, index) => `<img src="${escapeHtml(image)}" alt="${escapeHtml(product.name)} ${index + 1}" />`).join('');
@@ -221,8 +265,8 @@ function openModal(id) {
   const sizes = product.sizes && product.sizes.length ? product.sizes : ['Única'];
   byId('modalColor').innerHTML = colors.map((item) => `<option value="${escapeHtml(item)}">${escapeHtml(item)}</option>`).join('');
   byId('modalSize').innerHTML = sizes.map((item) => `<option value="${escapeHtml(item)}">${escapeHtml(item)}</option>`).join('');
-  byId('modalAdd').disabled = product.stock === false;
-  byId('modalAdd').textContent = product.stock === false ? 'Sin stock' : 'Agregar a la bolsa';
+  byId('modalAdd').disabled = !inStock || remaining === 0;
+  byId('modalAdd').textContent = !inStock ? 'Sin stock' : remaining === 0 ? 'Ya en tu bolsa' : 'Agregar a la bolsa';
   byId('productModal').hidden = false;
   document.body.style.overflow = 'hidden';
 }
@@ -238,6 +282,10 @@ function cartKey(item) {
 }
 
 function addToCart(product, color, size) {
+  if (!isInStock(product) || remainingStock(product) <= 0) {
+    showToast(isInStock(product) ? 'No hay más unidades disponibles' : 'Producto agotado');
+    return;
+  }
   const key = cartKey({ id: product.id, color, size });
   const existing = state.cart.find((item) => cartKey(item) === key);
   if (existing) existing.qty += 1;
@@ -270,12 +318,15 @@ function renderCart() {
   if (!state.cart.length) {
     byId('cartItems').innerHTML = '<p class="cart-empty">Tu bolsa está vacía.</p>';
     byId('checkoutButton').disabled = true;
+    renderProducts();
     return;
   }
 
   byId('checkoutButton').disabled = false;
   byId('cartItems').innerHTML = state.cart.map((item) => {
     const key = cartKey(item);
+    const product = state.products.find((entry) => entry.id === item.id);
+    const canInc = !product || remainingStock(product) > 0;
     return `
       <div class="cart-item">
         <img src="${escapeHtml(item.image)}" alt="${escapeHtml(item.name)}" />
@@ -285,7 +336,7 @@ function renderCart() {
           <div class="qty-control">
             <button type="button" data-dec="${escapeHtml(key)}" aria-label="Reducir">−</button>
             <span>${item.qty}</span>
-            <button type="button" data-inc="${escapeHtml(key)}" aria-label="Aumentar">+</button>
+            <button type="button" data-inc="${escapeHtml(key)}" aria-label="Aumentar" ${canInc ? '' : 'disabled'}>+</button>
           </div>
         </div>
         <div>
@@ -294,6 +345,7 @@ function renderCart() {
         </div>
       </div>`;
   }).join('');
+  renderProducts();
 }
 
 function openCart() {
@@ -306,12 +358,54 @@ function closeCart() {
   if (byId('productModal').hidden) document.body.style.overflow = '';
 }
 
-function checkout() {
-  if (!state.cart.length) return;
-  const brand = state.shop.brand || 'EMILIO BAGS';
-  const lines = state.cart.map((item) => `• ${item.name} | ${item.color} | ${item.size} | x${item.qty} - ${money(item.price * item.qty)}`);
-  const message = `¡Hola ${brand}! Quiero hacer este pedido:\n\n${lines.join('\n')}\n\nTotal: ${money(cartTotal())}\nEnvío a cotizar.`;
-  window.open(whatsappUrl(message), '_blank', 'noopener');
+async function checkout() {
+  if (!state.cart.length || state.checkoutBusy) return;
+  const button = byId('checkoutButton');
+  state.checkoutBusy = true;
+  button.disabled = true;
+  const popup = window.open('', '_blank');
+  if (popup) popup.opener = null;
+
+  const items = state.cart.map((item) => ({
+    id: item.id,
+    name: item.name,
+    color: item.color,
+    size: item.size,
+    qty: item.qty,
+    price: item.price
+  }));
+  const lines = items.map((item) => `• ${item.name} | ${item.color} | ${item.size} | x${item.qty} - ${money(item.price * item.qty)}`);
+  if (!state.orderId) state.orderId = `${Date.now()}-${Math.random().toString(36).slice(2, 10)}`;
+
+  try {
+    const response = await fetch('/api/orders', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ clientOrderId: state.orderId, items })
+    });
+    const result = await response.json().catch(() => ({}));
+    if (!response.ok) throw new Error(result.error || 'No se pudo registrar el pedido');
+
+    const productsResponse = await fetch('/api/products');
+    state.products = await productsResponse.json();
+    const brand = state.shop.brand || 'EMILIO BAGS';
+    const message = `¡Hola ${brand}! Quiero hacer el pedido ${result.order.code}:\n\n${lines.join('\n')}\n\nTotal: ${money(result.order.total)}\nEnvío a cotizar.`;
+
+    state.cart = [];
+    state.orderId = null;
+    storage.set('emilio.cart', state.cart);
+    renderCart();
+    const url = whatsappUrl(message);
+    if (popup && !popup.closed) popup.location.href = url;
+    else window.location.href = url;
+    showToast('Pedido registrado. Stock actualizado.');
+  } catch (error) {
+    if (popup && !popup.closed) popup.close();
+    showToast(error.message);
+  } finally {
+    state.checkoutBusy = false;
+    button.disabled = state.cart.length === 0;
+  }
 }
 
 let toastTimer;
@@ -426,6 +520,11 @@ function bindEvents() {
     const inc = event.target.closest('[data-inc]');
     if (inc) {
       const item = state.cart.find((entry) => cartKey(entry) === inc.dataset.inc);
+      const product = item && state.products.find((entry) => entry.id === item.id);
+      if (product && remainingStock(product) <= 0) {
+        showToast('No hay más unidades disponibles');
+        return;
+      }
       if (item) item.qty += 1;
       storage.set('emilio.cart', state.cart);
       renderCart();
@@ -467,6 +566,7 @@ async function init() {
     state.shop = await shopResponse.json();
     state.products = await productsResponse.json();
     state.categories = await categoriesResponse.json();
+    sanitizeCart();
     readCategoryFromUrl();
     applyShop();
     bindEvents();

@@ -47,7 +47,7 @@ function showLogin(message = '') {
 async function showAdmin() {
   byId('loginView').hidden = true;
   byId('adminView').hidden = false;
-  await Promise.all([loadCategories(), loadProducts(), loadShop()]);
+  await Promise.all([loadCategories(), loadProducts(), loadOrders(), loadShop()]);
 }
 
 function setMessage(id, message) {
@@ -74,16 +74,41 @@ async function loadCategories() {
 async function loadProducts() {
   const products = await api('/api/products');
   byId('productTableBody').innerHTML = products.length
-    ? products.map((product) => `
+    ? products.map((product) => {
+        const qty = product.quantity;
+        const amount = qty === null || qty === undefined ? 'Sin límite' : qty;
+        const status = product.active === false ? 'Oculto' : qty === 0 || product.stock === false ? 'Agotado' : qty === null || qty === undefined ? 'Visible' : `Stock: ${qty}`;
+        return `
         <tr>
           <td><img src="${escapeHtml(product.images && product.images[0] ? product.images[0] : '')}" alt="" /></td>
           <td>${escapeHtml(product.name)}</td>
           <td>${escapeHtml(product.category)}</td>
           <td>S/ ${Number(product.price || 0).toFixed(2)}</td>
-          <td>${product.active === false ? 'Oculto' : product.stock === false ? 'Agotado' : 'Visible'}</td>
+          <td>${amount}</td>
+          <td>${status}</td>
           <td><button type="button" data-edit-product="${escapeHtml(product.id)}">Editar</button><button class="danger" type="button" data-delete-product="${escapeHtml(product.id)}">Eliminar</button></td>
-        </tr>`).join('')
-    : '<tr><td colspan="6">Aún no hay productos.</td></tr>';
+        </tr>`;
+      }).join('')
+    : '<tr><td colspan="7">Aún no hay productos.</td></tr>';
+}
+
+async function loadOrders() {
+  const orders = await api('/api/orders');
+  byId('orderTableBody').innerHTML = orders.length
+    ? orders.map((order) => {
+        const products = (order.items || []).map((item) => `${escapeHtml(item.name)} x${item.qty}`).join(', ');
+        const date = new Date(order.createdAt);
+        const fecha = Number.isNaN(date.getTime()) ? '' : date.toLocaleString('es-PE');
+        return `
+        <tr>
+          <td>${escapeHtml(order.code || order.id)}</td>
+          <td>${escapeHtml(fecha)}</td>
+          <td>${products || '-'}</td>
+          <td>S/ ${Number(order.total || 0).toFixed(2)}</td>
+          <td>${escapeHtml(order.status || 'confirmado')}${order.stockDeducted ? ' · stock descontado' : ''}</td>
+        </tr>`;
+      }).join('')
+    : '<tr><td colspan="5">Aún no hay pedidos.</td></tr>';
 }
 
 async function loadShop() {
@@ -166,7 +191,7 @@ async function editProduct(id) {
   form.elements.sizes.value = (product.sizes || []).join(', ');
   form.elements.badge.value = product.badge || '';
   form.elements.description.value = product.description || '';
-  form.elements.stock.checked = product.stock !== false;
+  form.elements.quantity.value = product.quantity === null || product.quantity === undefined ? '' : product.quantity;
   form.elements.active.checked = product.active !== false;
   form.elements.featured.checked = Boolean(product.featured);
   pendingImages = [...(product.images || [])];
@@ -217,9 +242,10 @@ function bindEvents() {
   document.querySelectorAll('.admin-tab').forEach((tab) => {
     tab.addEventListener('click', () => {
       document.querySelectorAll('.admin-tab').forEach((item) => item.classList.toggle('active', item === tab));
-      ['products', 'categories', 'shop'].forEach((name) => {
+      ['products', 'orders', 'categories', 'shop'].forEach((name) => {
         byId(`tab-${name}`).hidden = name !== tab.dataset.tab;
       });
+      if (tab.dataset.tab === 'orders') loadOrders().catch(() => {});
     });
   });
 
@@ -258,7 +284,7 @@ function bindEvents() {
       sizes: String(data.get('sizes') || ''),
       badge: String(data.get('badge') || ''),
       description: String(data.get('description') || ''),
-      stock: data.has('stock'),
+      quantity: data.get('quantity'),
       active: data.has('active'),
       featured: data.has('featured'),
       images: pendingImages

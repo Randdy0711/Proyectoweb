@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Admin | EMILIO BAGS</title>
   <link rel="icon" href="/img/logo/emilio-bags.svg" type="image/svg+xml" />
-  <link rel="stylesheet" href="/css/styles.css?v=3" />
+  <link rel="stylesheet" href="/css/styles.css?v=7" />
 </head>
 <body>
   <div id="loginView" class="container admin-login">
@@ -36,6 +36,7 @@
 
     <nav class="admin-tabs" aria-label="Secciones">
       <button class="admin-tab active" type="button" data-tab="products">Productos</button>
+      <button class="admin-tab" type="button" data-tab="orders">Pedidos</button>
       <button class="admin-tab" type="button" data-tab="categories">Categorías</button>
       <button class="admin-tab" type="button" data-tab="shop">Configuración</button>
     </nav>
@@ -49,11 +50,11 @@
           <label class="admin-field">Categoría<select name="category" id="productCategory"></select></label>
           <label class="admin-field">Precio (S/)<input name="price" type="number" step="0.01" min="0" required /></label>
           <label class="admin-field">Precio anterior (opcional)<input name="oldPrice" type="number" step="0.01" min="0" /></label>
+          <label class="admin-field">Cantidad (vacío = sin límite)<input name="quantity" type="number" min="0" step="1" placeholder="Ej. 12" /></label>
           <label class="admin-field">Colores (separados por coma)<input name="colors" placeholder="Negro, Café, Beige" /></label>
           <label class="admin-field">Tallas o medidas<input name="sizes" placeholder="Única, 28, 30" /></label>
           <label class="admin-field">Etiqueta<input name="badge" placeholder="Oferta, Nuevo" /></label>
           <label class="admin-field full">Descripción<textarea name="description"></textarea></label>
-          <label class="admin-check"><input name="stock" type="checkbox" checked /> Disponible</label>
           <label class="admin-check"><input name="active" type="checkbox" checked /> Visible en tienda</label>
           <label class="admin-check"><input name="featured" type="checkbox" /> Destacado</label>
           <label class="admin-field full">Fotos del producto<input id="productImages" type="file" accept="image/*" multiple /></label>
@@ -70,8 +71,20 @@
         <h2>Productos cargados</h2>
         <div class="admin-table-wrap">
           <table class="admin-table">
-            <thead><tr><th>Foto</th><th>Producto</th><th>Categoría</th><th>Precio</th><th>Estado</th><th>Acciones</th></tr></thead>
+            <thead><tr><th>Foto</th><th>Producto</th><th>Categoría</th><th>Precio</th><th>Cantidad</th><th>Estado</th><th>Acciones</th></tr></thead>
             <tbody id="productTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section id="tab-orders" hidden>
+      <div class="admin-card">
+        <h2>Pedidos registrados</h2>
+        <div class="admin-table-wrap">
+          <table class="admin-table">
+            <thead><tr><th>Código</th><th>Fecha</th><th>Productos</th><th>Total</th><th>Estado</th></tr></thead>
+            <tbody id="orderTableBody"></tbody>
           </table>
         </div>
       </div>
@@ -138,6 +151,6 @@
     </section>
   </div>
 
-  <script src="/js/admin.js" defer></script>
+  <script src="/js/admin.js?v=7" defer></script>
 </body>
 </html>

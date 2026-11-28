@@ -6,7 +6,7 @@
   <meta name="description" content="EMILIO BAGS: bolsos, mochilas, carteras y bandoleras. Pedidos por WhatsApp." />
   <title>EMILIO BAGS | Bolsos y accesorios</title>
   <link rel="icon" href="/img/logo/emilio-bags.svg" type="image/svg+xml" />
-  <link rel="stylesheet" href="/css/styles.css?v=3" />
+  <link rel="stylesheet" href="/css/styles.css?v=7" />
 </head>
 <body>
   <header class="site-header">
@@ -161,6 +161,7 @@
           <h2 id="modalName"></h2>
           <div id="modalPrice" class="modal-price"></div>
           <p id="modalDescription"></p>
+          <p id="modalStock" class="stock-count" hidden></p>
           <label class="variant-label">Color <select id="modalColor"></select></label>
           <label class="variant-label">Tamaño <select id="modalSize"></select></label>
           <button id="modalAdd" class="btn btn-dark btn-block" type="button">Agregar a la bolsa</button>
@@ -181,7 +182,7 @@
       <div class="drawer-footer">
         <div class="cart-total"><span>Total</span><strong id="cartTotal">S/ 0.00</strong></div>
         <p id="cartNote">El envío se cotiza aparte según tu distrito.</p>
-        <button id="checkoutButton" class="btn btn-dark btn-block" type="button">Enviar pedido por WhatsApp</button>
+        <button id="checkoutButton" class="btn btn-dark btn-block" type="button">Confirmar pedido</button>
       </div>
     </div>
   </aside>
@@ -189,6 +190,6 @@
   <div id="toast" class="toast" hidden></div>
   <a id="floatWhatsapp" class="float-whatsapp" href="#" target="_blank" rel="noopener" aria-label="Escribir por WhatsApp">WA</a>
 
-  <script src="/js/app.js" defer></script>
+  <script src="/js/app.js?v=9" defer></script>
 </body>
 </html>

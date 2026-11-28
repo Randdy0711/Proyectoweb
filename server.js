@@ -9,6 +9,7 @@ const DATA_DIR = path.join(ROOT, 'data');
 const PUBLIC_DIR = path.join(ROOT, 'public');
 const SHOP_FILE = path.join(DATA_DIR, 'shop.json');
 const PRODUCTS_FILE = path.join(DATA_DIR, 'products.json');
+const ORDERS_FILE = path.join(DATA_DIR, 'orders.json');
 const PORT = Number(process.env.PORT) || 3000;
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'emilio2026';
 
@@ -16,7 +17,11 @@ const app = express();
 
 app.use(express.json({ limit: '2mb' }));
 app.use(express.urlencoded({ extended: true }));
-app.use(express.static(PUBLIC_DIR, { extensions: ['html'], maxAge: '1h' }));
+app.use(express.static(PUBLIC_DIR, { extensions: ['html'], maxAge: 0 }));
+app.use('/api', (req, res, next) => {
+  res.set('Cache-Control', 'no-store');
+  next();
+});
 
 let writeQueue = Promise.resolve();
 
@@ -62,7 +67,16 @@ function asArray(value) {
   return [];
 }
 
+function normalizeQuantity(value, fallback) {
+  const raw = value === undefined ? fallback : value;
+  if (raw === '' || raw === null || raw === undefined) return null;
+  const number = Number(raw);
+  if (!Number.isFinite(number)) return null;
+  return Math.max(0, Math.floor(number));
+}
+
 function normalizeProduct(body, existing = {}) {
+  const quantity = normalizeQuantity(body.quantity, existing.quantity);
   return {
     id: existing.id || body.id || `p-${Date.now()}-${crypto.randomBytes(3).toString('hex')}`,
     name: String(body.name || existing.name || '').trim(),
@@ -74,12 +88,32 @@ function normalizeProduct(body, existing = {}) {
     sizes: asArray(body.sizes !== undefined ? body.sizes : existing.sizes),
     description: String(body.description || existing.description || '').trim(),
     badge: String(body.badge || existing.badge || '').trim(),
-    stock: body.stock === undefined ? existing.stock !== false : Boolean(body.stock),
+    quantity,
+    stock: quantity === null
+      ? (body.stock === undefined ? existing.stock !== false : Boolean(body.stock))
+      : quantity > 0,
     active: body.active === undefined ? existing.active !== false : Boolean(body.active),
     featured: body.featured === undefined ? Boolean(existing.featured) : Boolean(body.featured),
     createdAt: existing.createdAt || new Date().toISOString(),
     updatedAt: new Date().toISOString()
   };
+}
+
+function trackedQuantity(product) {
+  return normalizeQuantity(product.quantity, undefined);
+}
+
+function httpError(message, statusCode) {
+  const error = new Error(message);
+  error.statusCode = statusCode;
+  return error;
+}
+
+let orderQueue = Promise.resolve();
+function withOrderLock(task) {
+  const result = orderQueue.then(task);
+  orderQueue = result.catch(() => {});
+  return result;
 }
 
 function getPassword(req) {
@@ -273,6 +307,82 @@ app.delete('/api/products/:id', requireAdmin, async (req, res, next) => {
   }
 });
 
+app.get('/api/orders', requireAdmin, async (req, res, next) => {
+  try {
+    const orders = await readJson(ORDERS_FILE, []);
+    res.json(Array.isArray(orders) ? orders : []);
+  } catch (error) {
+    next(error);
+  }
+});
+
+app.post('/api/orders', async (req, res, next) => {
+  try {
+    const result = await withOrderLock(async () => {
+      const orders = await readJson(ORDERS_FILE, []);
+      const clientOrderId = String(req.body.clientOrderId || '').trim().slice(0, 100);
+      if (clientOrderId) {
+        const existing = orders.find((order) => order.clientOrderId === clientOrderId);
+        if (existing) return { order: existing, duplicate: true };
+      }
+
+      const rawItems = Array.isArray(req.body.items) ? req.body.items : [];
+      if (!rawItems.length) throw httpError('El carrito está vacío', 400);
+
+      const products = await readJson(PRODUCTS_FILE, []);
+      const items = rawItems.map((raw) => {
+        const id = String(raw.id || '');
+        const product = products.find((entry) => entry.id === id);
+        if (!product) throw httpError(`Producto no encontrado: ${id}`, 400);
+        const qty = normalizeQuantity(raw.qty, 0);
+        if (qty === null || qty <= 0) throw httpError('Cantidad inválida', 400);
+        const available = trackedQuantity(product);
+        if (available === null && product.stock === false) {
+          throw httpError(`${product.name} está agotado`, 409);
+        }
+        if (available !== null && available < qty) {
+          throw httpError(`Solo quedan ${available} de ${product.name}`, 409);
+        }
+        if (available !== null) {
+          product.quantity = available - qty;
+          product.stock = product.quantity > 0;
+          product.updatedAt = new Date().toISOString();
+        }
+        const price = Number(raw.price) || 0;
+        return {
+          id: product.id,
+          name: product.name || String(raw.name || ''),
+          color: String(raw.color || ''),
+          size: String(raw.size || ''),
+          qty,
+          price,
+          subtotal: Math.round(price * qty * 100) / 100,
+          tracked: available !== null
+        };
+      });
+
+      const order = {
+        id: `o-${Date.now()}-${crypto.randomBytes(3).toString('hex')}`,
+        code: `#${String(Date.now()).slice(-6)}`,
+        clientOrderId: clientOrderId || null,
+        createdAt: new Date().toISOString(),
+        items,
+        total: Math.round(items.reduce((sum, item) => sum + item.subtotal, 0) * 100) / 100,
+        status: 'confirmado',
+        stockDeducted: items.some((item) => item.tracked)
+      };
+
+      await saveJson(PRODUCTS_FILE, products);
+      orders.unshift(order);
+      await saveJson(ORDERS_FILE, orders);
+      return { order, duplicate: false };
+    });
+    res.status(result.duplicate ? 200 : 201).json(result);
+  } catch (error) {
+    next(error);
+  }
+});
+
 app.post('/api/upload', requireAdmin, upload.array('images', 10), (req, res) => {
   const isLogo = req.query.kind === 'logo';
   const urls = req.files.map((file) => `${isLogo ? '/img/logo' : '/img_productos'}/${file.filename}`);
@@ -284,7 +394,13 @@ app.use('/api', (req, res) => {
 });
 
 app.use((error, req, res, next) => {
+  if (error.statusCode && error.statusCode < 500) {
+    return res.status(error.statusCode).json({ error: error.message });
+  }
   console.error(error);
+  if (error.statusCode) {
+    return res.status(error.statusCode).json({ error: error.message });
+  }
   if (error instanceof multer.MulterError) {
     return res.status(400).json({ error: error.message });
   }
